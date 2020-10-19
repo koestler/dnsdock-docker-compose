@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  config:
+    image: koestler/dnsdock-config-ubuntu:latest
+    cap_add:
+       - NET_ADMIN
+    volumes:
+      - /var/run/dbus:/var/run/dbus
+    network_mode: "host"
+    privileged: true
+
+  dnsdock:
+    image: koestler/dnsdock:latest
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      dnsdock:
+        ipv4_address: 172.16.53.2
+
+networks:
+  dnsdock:
+    internal: false
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      config:
+        - subnet: 172.16.53.0/24
+          gateway: 172.16.53.1
