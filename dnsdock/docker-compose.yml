@@ -3,13 +3,14 @@ version: '3'
 services:
   config:
     image: koestler/dnsdock-config-ubuntu:latest
-    cap_add:
-       - NET_ADMIN
+    restart: always
+    privileged: true
     volumes:
       - /var/run/dbus:/var/run/dbus
     network_mode: "host"
-    privileged: true
-
+    cap_add:
+       - NET_ADMIN
+       
   dnsdock:
     image: koestler/dnsdock:latest
     restart: always
